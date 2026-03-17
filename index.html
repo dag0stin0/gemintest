@@ -197,6 +197,31 @@ nav.scrolled .nav-center{opacity:1}
 .section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2) 20%,var(--line2) 80%,transparent);position:relative}
 .section-divider::after{content:'';position:absolute;left:50%;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--blue);transform:translateX(-50%);box-shadow:0 0 12px rgba(0,102,255,0.4)}
 
+/* ── Interactive Doc Overview ── */
+#doc-overview{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:600;display:flex;flex-direction:column;align-items:flex-end;gap:0}
+#doc-toggle{width:36px;height:36px;border-radius:2px;background:rgba(14,14,12,0.9);border:1px solid var(--line2);backdrop-filter:blur(16px);cursor:none;display:flex;align-items:center;justify-content:center;transition:border-color .2s,box-shadow .2s;margin-bottom:8px;flex-shrink:0}
+#doc-toggle:hover{border-color:rgba(0,102,255,0.5);box-shadow:0 0 16px rgba(0,102,255,0.12);cursor:none}
+#doc-toggle svg{width:14px;height:14px;transition:transform .3s}
+#doc-overview.open #doc-toggle svg{transform:rotate(45deg)}
+#doc-panel{background:rgba(14,14,12,0.92);border:1px solid var(--line2);backdrop-filter:blur(24px) saturate(160%);border-radius:2px;padding:0;overflow:hidden;width:0;max-height:0;opacity:0;transition:width .35s cubic-bezier(.16,1,.3,1),max-height .35s cubic-bezier(.16,1,.3,1),opacity .25s,padding .35s;pointer-events:none;box-shadow:0 8px 48px rgba(0,0,0,0.5)}
+#doc-overview.open #doc-panel{width:220px;max-height:400px;opacity:1;padding:8px 0;pointer-events:auto}
+.doc-panel-head{padding:12px 18px 8px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line)}
+.doc-section-item{display:flex;align-items:center;gap:12px;padding:10px 18px;cursor:none;transition:background .2s;position:relative;text-decoration:none}
+.doc-section-item:hover{background:rgba(242,240,235,0.04)}
+.doc-section-item.active{background:rgba(0,102,255,0.06)}
+.doc-section-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--blue);box-shadow:0 0 8px rgba(0,102,255,0.4)}
+.doc-pip{width:5px;height:5px;border-radius:50%;background:var(--dim);flex-shrink:0;transition:background .2s,box-shadow .2s}
+.doc-section-item.active .doc-pip{background:var(--blue);box-shadow:0 0 6px rgba(0,102,255,0.5)}
+.doc-item-inner{display:flex;flex-direction:column;gap:1px}
+.doc-item-tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.doc-item-name{font-size:12px;color:var(--off);line-height:1.4;transition:color .2s}
+.doc-section-item.active .doc-item-tag{color:rgba(51,136,255,0.7)}
+.doc-section-item.active .doc-item-name{color:var(--white)}
+.doc-progress-bar{position:absolute;bottom:0;left:18px;right:18px;height:1px;background:var(--line)}
+.doc-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--orange));width:0%;transition:width .3s ease}
+
+@media(max-width:768px){#doc-overview{display:none}}
+
 @media(max-width:1024px){
   .clips-grid{grid-template-columns:repeat(2,1fr)}
   .status-grid{grid-template-columns:1fr}
@@ -229,6 +254,42 @@ nav.scrolled .nav-center{opacity:1}
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 <canvas id="particles"></canvas>
+
+<div id="doc-overview">
+  <button id="doc-toggle" aria-label="Toggle document overview" aria-expanded="false">
+    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="rgba(242,240,235,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="2" y1="7" x2="12" y2="7" stroke="rgba(242,240,235,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="2" y1="10.5" x2="9" y2="10.5" stroke="rgba(242,240,235,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <div id="doc-panel" role="navigation" aria-label="Document sections">
+    <div class="doc-panel-head">Overview</div>
+    <a href="#concept"     class="doc-section-item" data-section="concept">
+      <div class="doc-pip"></div>
+      <div class="doc-item-inner"><div class="doc-item-tag">01</div><div class="doc-item-name">The Concept</div></div>
+    </a>
+    <a href="#activations" class="doc-section-item" data-section="activations">
+      <div class="doc-pip"></div>
+      <div class="doc-item-inner"><div class="doc-item-tag">02</div><div class="doc-item-name">Activations</div></div>
+    </a>
+    <a href="#schedule"    class="doc-section-item" data-section="schedule">
+      <div class="doc-pip"></div>
+      <div class="doc-item-inner"><div class="doc-item-tag">03</div><div class="doc-item-name">Schedule</div></div>
+    </a>
+    <a href="#content"     class="doc-section-item" data-section="content">
+      <div class="doc-pip"></div>
+      <div class="doc-item-inner"><div class="doc-item-tag">04</div><div class="doc-item-name">Content Deliverables</div></div>
+    </a>
+    <a href="#status"      class="doc-section-item" data-section="status">
+      <div class="doc-pip"></div>
+      <div class="doc-item-inner"><div class="doc-item-tag">05</div><div class="doc-item-name">Status</div></div>
+    </a>
+    <div style="padding:10px 18px 4px;border-top:1px solid var(--line);margin-top:4px">
+      <div class="doc-progress-bar" style="position:relative;left:auto;right:auto;bottom:auto"><div class="doc-progress-fill" id="doc-prog"></div></div>
+    </div>
+  </div>
+</div>
 
 <nav id="nav">
   <div class="nav-logo"><span>Gemini</span> Series</div>
@@ -576,6 +637,59 @@ updateCD();setInterval(updateCD,1000);
 document.querySelectorAll('.hero-title .word').forEach(w=>{const d=document.createElement('div');d.style.cssText='overflow:hidden;display:block;';w.parentNode.insertBefore(d,w);d.appendChild(w)});
 
 document.querySelectorAll('.nav-link,.nav-cta').forEach(l=>{l.addEventListener('click',e=>{const h=l.getAttribute('href');if(h&&h.startsWith('#')){e.preventDefault();const t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}})});
+
+// ── Doc Overview ──
+(function(){
+  const ov=document.getElementById('doc-overview');
+  const tog=document.getElementById('doc-toggle');
+  const prog=document.getElementById('doc-prog');
+  const items=document.querySelectorAll('.doc-section-item');
+  const sections=['concept','activations','schedule','content','status'].map(id=>document.getElementById(id)).filter(Boolean);
+
+  tog.addEventListener('click',()=>{
+    const open=ov.classList.toggle('open');
+    tog.setAttribute('aria-expanded',open);
+  });
+
+  items.forEach(item=>{
+    item.addEventListener('click',e=>{
+      e.preventDefault();
+      const id=item.getAttribute('data-section');
+      const el=document.getElementById(id);
+      if(el)el.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  function getActive(){
+    const mid=window.innerHeight*0.42;
+    let best=null,bestDist=Infinity;
+    sections.forEach(s=>{
+      const r=s.getBoundingClientRect();
+      const dist=Math.abs(r.top-mid);
+      if(r.top<=mid+40&&dist<bestDist){bestDist=dist;best=s}
+    });
+    return best;
+  }
+
+  function updateOverview(){
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    const pct=h>0?Math.round((window.scrollY/h)*100):0;
+    if(prog)prog.style.width=pct+'%';
+    const active=getActive();
+    items.forEach(item=>{
+      const match=active&&item.getAttribute('data-section')===active.id;
+      item.classList.toggle('active',match);
+    });
+  }
+
+  window.addEventListener('scroll',updateOverview,{passive:true});
+  updateOverview();
+
+  // Show toggle after first scroll
+  ov.style.opacity='0';ov.style.transition='opacity .5s';
+  let shown=false;
+  window.addEventListener('scroll',()=>{if(!shown&&window.scrollY>120){ov.style.opacity='1';shown=true}},{passive:true,once:false});
+})();
 </script>
 </body>
 </html>
