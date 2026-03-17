@@ -23,23 +23,18 @@
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none}
 
-/* ── SCROLL PROGRESS ── */
 #scroll-progress{position:fixed;top:0;left:0;z-index:10000;height:2px;width:0%;background:linear-gradient(90deg,var(--blue),var(--orange),var(--blue));background-size:200% 100%;animation:gradShift 3s linear infinite;transition:width 0.08s linear;box-shadow:0 0 16px rgba(0,102,255,0.4),0 0 32px rgba(255,85,0,0.2)}
 @keyframes gradShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 
-/* ── CURSOR ── */
 #cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;background:var(--blue);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:screen;box-shadow:0 0 14px rgba(0,102,255,0.5)}
 #cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:32px;height:32px;border:1.5px solid rgba(0,102,255,0.5);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s cubic-bezier(.23,1,.32,1),height .3s cubic-bezier(.23,1,.32,1),border-color .2s}
 body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:5px;height:5px}
 body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:52px;height:52px;border-color:rgba(0,102,255,0.35)}
 
-/* ── NOISE ── */
 body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:0.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
 
-/* ── PARTICLES ── */
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5}
 
-/* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:background .4s,border-color .4s,box-shadow .4s}
 nav.scrolled{background:rgba(5,5,5,0.92);backdrop-filter:blur(28px) saturate(170%);border-bottom:1px solid var(--line);box-shadow:0 4px 40px rgba(0,0,0,0.5)}
 .nav-logo{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--white)}
@@ -56,7 +51,6 @@ nav.scrolled .nav-center{opacity:1}
 .nav-cta:hover{background:rgba(0,102,255,0.14);border-color:rgba(0,102,255,0.7);box-shadow:0 0 28px rgba(0,102,255,0.12)}
 .nav-cta:hover::before{opacity:1}
 
-/* ── HERO ── */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 100px;position:relative;overflow:hidden}
 .hero-lines{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(242,240,235,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(242,240,235,0.03) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 100% 80% at 50% 100%,rgba(0,0,0,0.7) 0%,transparent 100%)}
 .hero-orb{position:absolute;width:1400px;height:900px;top:-250px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(0,102,255,0.15) 0%,rgba(255,85,0,0.05) 35%,transparent 65%);pointer-events:none;z-index:0;animation:orbPulse 7s ease-in-out infinite}
@@ -68,7 +62,6 @@ nav.scrolled .nav-center{opacity:1}
 .hero-float:nth-child(3){left:55%;top:55%;animation-delay:-8s;font-size:42px}
 .hero-float:nth-child(4){left:22%;top:18%;animation-delay:-11s;font-size:24px}
 @keyframes floatUp{0%,100%{transform:translateY(0) rotate(0deg);opacity:.04}50%{transform:translateY(-40px) rotate(12deg);opacity:.1}}
-
 .hero-meta{position:absolute;top:calc(var(--nav-h) + 32px);left:48px;right:48px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
 .hero-badge{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-bright);border:1px solid rgba(0,102,255,0.35);padding:7px 16px 7px 24px;border-radius:2px;animation:fadeUp 1s ease .3s both;position:relative;background:rgba(0,102,255,0.05)}
 .hero-badge::before{content:'';position:absolute;left:10px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(0,102,255,0.5);animation:livePulse 2.5s ease-in-out infinite}
@@ -93,15 +86,12 @@ nav.scrolled .nav-center{opacity:1}
 .cd-unit{text-align:center}
 .cd-num{font-family:'Anton',sans-serif;font-size:36px;color:var(--white);line-height:1;display:block;transition:transform .3s cubic-bezier(.16,1,.3,1),color .2s,text-shadow .2s;min-width:42px}
 .cd-num.tick{transform:scale(1.12);color:var(--blue);text-shadow:0 0 18px rgba(0,102,255,0.45)}
-.cd-sep{font-family:'Anton',sans-serif;font-size:36px;color:var(--dim);line-height:1;opacity:.3}
 .cd-unit-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:6px}
-
 .scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;animation:fadeUp 1s ease 1.6s both}
 .scroll-cue span{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
 .scroll-arrow{width:1px;height:36px;background:linear-gradient(to bottom,var(--off) 0%,transparent 100%);animation:scrollPulse 2.4s ease-in-out infinite}
 @keyframes scrollPulse{0%,100%{transform:scaleY(.5);opacity:.3;transform-origin:top}50%{transform:scaleY(1);opacity:.8;transform-origin:top}}
 
-/* ── TICKER ── */
 .ticker{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);background:var(--surface);overflow:hidden;white-space:nowrap;padding:18px 0;position:relative}
 .ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2}
 .ticker::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
@@ -115,13 +105,11 @@ nav.scrolled .nav-center{opacity:1}
 .ticker-num.orange{color:var(--orange-bright);text-shadow:0 0 16px rgba(255,85,0,0.25)}
 .ticker-sep{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--off)}
 
-/* ── SECTION ── */
 .section{padding:140px 48px;border-top:1px solid var(--line);position:relative}
 .tag{display:inline-block;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:28px;padding:6px 0;border-bottom:1px solid var(--line2)}
 .section-head{font-family:'Anton',sans-serif;font-size:clamp(48px,6.5vw,96px);line-height:.92;letter-spacing:.01em;color:var(--white);margin-bottom:40px}
 .section-head .ital{font-family:'Instrument Serif',serif;font-style:italic;font-size:.92em;color:var(--blue-bright);text-shadow:0 0 36px rgba(0,102,255,0.18)}
 
-/* ── CONCEPT ── */
 .concept-wrap{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
 .concept-body p{font-size:16px;font-weight:300;color:var(--off);line-height:1.85}
 .concept-body p+p{margin-top:18px}
@@ -134,7 +122,6 @@ nav.scrolled .nav-center{opacity:1}
 .why-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:5px;letter-spacing:.02em}
 .why-desc{font-size:13px;color:var(--off);line-height:1.65}
 
-/* ── ACTIVATIONS ── */
 .activations-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
 .activations-count{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .act-stack{display:flex;flex-direction:column}
@@ -155,9 +142,6 @@ nav.scrolled .nav-center{opacity:1}
 .zone-pip.blue{background:var(--blue);box-shadow:0 0 6px rgba(0,102,255,0.35)}
 .zone-name{font-size:11px;color:var(--off);line-height:1.5}
 
-
-
-/* ── RUN OF SHOW ── */
 .ros-single{background:var(--surface);padding:52px;margin-top:52px;border-radius:2px;position:relative;overflow:hidden;border:1px solid var(--line)}
 .ros-single::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--orange));box-shadow:0 0 16px rgba(0,102,255,0.25)}
 .ros-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--line2)}
@@ -178,7 +162,6 @@ nav.scrolled .nav-center{opacity:1}
 .ros-row.fire .ros-w{color:var(--orange-bright)}
 .ros-row.tbd .ros-t{color:var(--orange-bright);font-style:italic}
 
-/* ── CLIPS ── */
 .clips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
 .clip-card{background:var(--bg);padding:36px 28px;transition:background .2s,transform .3s;position:relative;overflow:hidden}
 .clip-card:hover{background:var(--surface2);transform:translateY(-2px)}
@@ -190,7 +173,6 @@ nav.scrolled .nav-center{opacity:1}
 .clip-card:nth-child(1) .clip-dur{color:var(--orange-bright)}
 .clip-card:nth-child(4) .clip-dur{color:var(--orange-bright)}
 
-/* ── STATUS ── */
 .status-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:56px}
 .status-col{background:var(--bg);padding:40px 36px}
 .status-col-head{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.08em;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px}
@@ -202,27 +184,21 @@ nav.scrolled .nav-center{opacity:1}
 .status-check{color:var(--blue-bright);font-size:12px;margin-top:2px;flex-shrink:0}
 .status-open{color:var(--orange-bright);font-size:12px;margin-top:2px;flex-shrink:0}
 
-/* ── FOOTER ── */
 .footer{border-top:1px solid var(--line2);padding:44px 48px;display:flex;justify-content:space-between;align-items:center}
 .footer-left{font-size:12px;color:var(--off)}
 .footer-left span{color:var(--blue-bright)}
 .footer-right{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 
-/* ── REVEAL ── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
 .reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.4s}.reveal-d5{transition-delay:.5s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── SECTION DIVIDER ── */
 .section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2) 20%,var(--line2) 80%,transparent);position:relative}
 .section-divider::after{content:'';position:absolute;left:50%;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--blue);transform:translateX(-50%);box-shadow:0 0 12px rgba(0,102,255,0.4)}
 
-/* ── RESPONSIVE ── */
 @media(max-width:1024px){
   .clips-grid{grid-template-columns:repeat(2,1fr)}
-  .venue-grid{grid-template-columns:1fr}
-  .venue-zone:nth-child(1){grid-row:auto}
   .status-grid{grid-template-columns:1fr}
 }
 @media(max-width:768px){
@@ -243,7 +219,6 @@ nav.scrolled .nav-center{opacity:1}
   body{cursor:auto}
   a,button{cursor:pointer}
   .hero-float{display:none}
-  .venue-grid{grid-template-columns:1fr}
   .status-grid{grid-template-columns:1fr}
 }
 </style>
@@ -255,7 +230,6 @@ nav.scrolled .nav-center{opacity:1}
 <div id="cursor-ring"></div>
 <canvas id="particles"></canvas>
 
-<!-- NAV -->
 <nav id="nav">
   <div class="nav-logo"><span>Gemini</span> Series</div>
   <div class="nav-center">March Madness · PubKey DC · March 27</div>
@@ -268,7 +242,6 @@ nav.scrolled .nav-center{opacity:1}
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-lines"></div>
   <div class="hero-orb"></div>
@@ -313,7 +286,6 @@ nav.scrolled .nav-center{opacity:1}
   </div>
 </section>
 
-<!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner" id="ticker">
     <div class="ticker-item"><span class="ticker-num blue">5</span><span class="ticker-sep">Activations</span></div>
@@ -331,7 +303,6 @@ nav.scrolled .nav-center{opacity:1}
   </div>
 </div>
 
-<!-- CONCEPT -->
 <section class="section" id="concept">
   <div class="reveal"><span class="tag">01 — The Concept</span></div>
   <div class="concept-wrap">
@@ -373,12 +344,10 @@ nav.scrolled .nav-center{opacity:1}
       </div>
     </div>
   </div>
-
-
+</section>
 
 <div class="section-divider"></div>
 
-<!-- ACTIVATIONS -->
 <section class="section" id="activations">
   <div class="reveal">
     <span class="tag">02 — Activations</span>
@@ -439,7 +408,6 @@ nav.scrolled .nav-center{opacity:1}
 
 <div class="section-divider"></div>
 
-<!-- SCHEDULE -->
 <section class="section" id="schedule">
   <div class="reveal">
     <span class="tag">03 — Schedule</span>
@@ -494,7 +462,6 @@ nav.scrolled .nav-center{opacity:1}
 
 <div class="section-divider"></div>
 
-<!-- CLIPS -->
 <section class="section" id="content">
   <div class="reveal">
     <span class="tag">04 — Content Deliverables</span>
@@ -537,7 +504,6 @@ nav.scrolled .nav-center{opacity:1}
 
 <div class="section-divider"></div>
 
-<!-- STATUS -->
 <section class="section" id="status">
   <div class="reveal">
     <span class="tag">05 — Status</span>
@@ -568,14 +534,12 @@ nav.scrolled .nav-center{opacity:1}
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-left"><span>Gemini Series</span> Live @ PubKey DC · March 27, 2026</div>
   <div class="footer-right">Internal Reference · pubkeybar.com</div>
 </footer>
 
 <script>
-/* PARTICLES */
 const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');let particles=[];
 function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
 resizeCanvas();window.addEventListener('resize',resizeCanvas);
@@ -588,24 +552,19 @@ function animP(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach
 for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<140){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(0,102,255,${.03*(1-d/140)})`;ctx.lineWidth=.5;ctx.stroke()}}
 requestAnimationFrame(animP)}animP();
 
-/* CURSOR */
 const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
 (function cLoop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cursor.style.left=mx+'px';cursor.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(cLoop)})();
 
-/* NAV */
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>60)},{passive:true});
 
-/* SCROLL PROGRESS */
 const pb=document.getElementById('scroll-progress');
 window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;pb.style.width=(window.scrollY/h)*100+'%'},{passive:true});
 
-/* REVEAL */
 const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.06});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* COUNTDOWN */
 let lastSec=-1;
 function updateCD(){const t=new Date('2026-03-27T18:00:00-04:00'),n=new Date(),d=t-n;
 if(d<=0){document.querySelector('.hero-countdown').innerHTML='<div class="countdown-label" style="color:var(--blue-bright);font-size:12px;letter-spacing:.2em">Game Day</div>';return}
@@ -614,10 +573,8 @@ const se=document.getElementById('cd-s');if(se&&ss!==lastSec){se.classList.add('
 document.getElementById('cd-d').textContent=String(dd).padStart(2,'0');document.getElementById('cd-h').textContent=String(hh).padStart(2,'0');document.getElementById('cd-m').textContent=String(mm).padStart(2,'0');if(se)se.textContent=String(ss).padStart(2,'0')}
 updateCD();setInterval(updateCD,1000);
 
-/* TITLE REVEAL */
 document.querySelectorAll('.hero-title .word').forEach(w=>{const d=document.createElement('div');d.style.cssText='overflow:hidden;display:block;';w.parentNode.insertBefore(d,w);d.appendChild(w)});
 
-/* NAV SMOOTH SCROLL */
 document.querySelectorAll('.nav-link,.nav-cta').forEach(l=>{l.addEventListener('click',e=>{const h=l.getAttribute('href');if(h&&h.startsWith('#')){e.preventDefault();const t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}})});
 </script>
 </body>
