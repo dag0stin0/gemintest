@@ -10,7 +10,8 @@
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
+.hero-tagline{font-family:'Anton',sans-serif;font-size:clamp(20px,2.8vw,36px);letter-spacing:.04em;color:var(--white);margin-bottom:16px;text-transform:uppercase}
+.hero-tagline em{font-family:'Anton',sans-serif;font-style:normal;color:var(--blue-bright);text-shadow:0 0 40px rgba(0,102,255,0.25)}
 :root{
   --blue:#0066FF;--blue-bright:#3388FF;--blue-glow:rgba(0,102,255,0.25);
   --orange:#FF5500;--orange-bright:#FF7733;--orange-glow:rgba(255,85,0,0.2);
@@ -70,11 +71,6 @@ nav.scrolled .nav-center{opacity:1}
 .hero-content{position:relative;z-index:2}
 .hero-eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--off);margin-bottom:20px;animation:fadeUp 1s ease .5s both}
 .hero-title{font-family:'Anton',sans-serif;font-size:clamp(60px,9.5vw,140px);line-height:.93;letter-spacing:-0.01em;margin-bottom:0;overflow:hidden}
-.hero-title .word{display:block;animation:titleReveal 1.1s cubic-bezier(.16,1,.3,1) both;margin-bottom:.08em}
-.hero-title .word:last-child{margin-bottom:0}
-.hero-title .word:nth-child(1){animation-delay:.6s}
-.hero-title .word:nth-child(2){animation-delay:.72s}
-.hero-title .word:nth-child(3){animation-delay:.84s;color:var(--blue);text-shadow:0 0 60px rgba(0,102,255,0.25)}
 .hero-title .word{display:block;animation:titleReveal 1.1s cubic-bezier(.16,1,.3,1) both;margin-bottom:.08em}
 .hero-title .word:last-child{margin-bottom:0}
 .hero-title .word:nth-child(1){animation-delay:.6s}
@@ -325,17 +321,14 @@ nav.scrolled .nav-center{opacity:1}
   <div class="hero-content">
     <p class="hero-eyebrow">Elite Eight Watch Party · Five Activations · Prediction Market Overlay</p>
     <h1 class="hero-title">
-      <span class="word">THE GAME</span>
-      <span class="word">RUNS THROUGH</span>
-      <span class="word">GEMINI</span>
-    </h1>
-    <h1 class="hero-title">
       <span class="word">MARCH</span>
       <span class="word">MADNESS</span>
       <span class="word">DC</span>
     </h1>
-    <div class="hero-sub">
-      <div class="hero-sub-line"></div>
+   <div class="hero-sub">
+    <div class="hero-sub-line"></div>
+    <div class="hero-sub-text">
+      <p class="hero-tagline">The Game Runs Through <em>Gemini</em></p>
       <p>Five activations across 12,000 square feet. <em>Every zone feeds Gemini's prediction market overlay</em> — the stream, the floor, the back room, the bar.</p>
     </div>
   </div>
