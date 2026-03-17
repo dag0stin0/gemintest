@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Series × PubKey DC — March Madness Elite Eight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --blue:#0066FF;--blue-bright:#3388FF;--blue-glow:rgba(0,102,255,0.25);
+  --orange:#FF5500;--orange-bright:#FF7733;--orange-glow:rgba(255,85,0,0.2);
+  --white:#F2F0EB;--off:#C8C5BC;--dim:#8A877F;
+  --bg:#050505;--surface:#0E0E0C;--surface2:#161614;--surface3:#1C1C19;
+  --line:rgba(242,240,235,0.08);--line2:rgba(242,240,235,0.14);
+  --nav-h:64px;
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{position:fixed;top:0;left:0;z-index:10000;height:2px;width:0%;background:linear-gradient(90deg,var(--blue),var(--orange),var(--blue));background-size:200% 100%;animation:gradShift 3s linear infinite;transition:width 0.08s linear;box-shadow:0 0 16px rgba(0,102,255,0.4),0 0 32px rgba(255,85,0,0.2)}
+@keyframes gradShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+/* ── CURSOR ── */
+#cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;background:var(--blue);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:screen;box-shadow:0 0 14px rgba(0,102,255,0.5)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:32px;height:32px;border:1.5px solid rgba(0,102,255,0.5);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s cubic-bezier(.23,1,.32,1),height .3s cubic-bezier(.23,1,.32,1),border-color .2s}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:5px;height:5px}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:52px;height:52px;border-color:rgba(0,102,255,0.35)}
+
+/* ── NOISE ── */
+body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:0.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+/* ── PARTICLES ── */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:background .4s,border-color .4s,box-shadow .4s}
+nav.scrolled{background:rgba(5,5,5,0.92);backdrop-filter:blur(28px) saturate(170%);border-bottom:1px solid var(--line);box-shadow:0 4px 40px rgba(0,0,0,0.5)}
+.nav-logo{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--white)}
+.nav-logo span{color:var(--blue);text-shadow:0 0 20px rgba(0,102,255,0.35)}
+.nav-center{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);opacity:0;transition:opacity .4s}
+nav.scrolled .nav-center{opacity:1}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-link{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--off);text-decoration:none;transition:color .2s;position:relative}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--blue);transform:scaleX(0);transform-origin:right;transition:transform .3s ease}
+.nav-link:hover{color:var(--white)}
+.nav-link:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-cta{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-bright);border:1px solid rgba(0,102,255,0.45);padding:8px 20px;border-radius:2px;background:rgba(0,102,255,0.06);cursor:none;transition:all .25s;text-decoration:none;position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,102,255,0.1),transparent);opacity:0;transition:opacity .25s}
+.nav-cta:hover{background:rgba(0,102,255,0.14);border-color:rgba(0,102,255,0.7);box-shadow:0 0 28px rgba(0,102,255,0.12)}
+.nav-cta:hover::before{opacity:1}
+
+/* ── HERO ── */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 100px;position:relative;overflow:hidden}
+.hero-lines{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(242,240,235,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(242,240,235,0.03) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 100% 80% at 50% 100%,rgba(0,0,0,0.7) 0%,transparent 100%)}
+.hero-orb{position:absolute;width:1400px;height:900px;top:-250px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(0,102,255,0.15) 0%,rgba(255,85,0,0.05) 35%,transparent 65%);pointer-events:none;z-index:0;animation:orbPulse 7s ease-in-out infinite}
+.hero-orb2{position:absolute;width:800px;height:600px;bottom:-200px;right:-200px;background:radial-gradient(ellipse at center,rgba(255,85,0,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;animation:orbPulse 9s ease-in-out infinite reverse}
+@keyframes orbPulse{0%,100%{opacity:.65;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
+.hero-float{position:absolute;z-index:1;pointer-events:none;font-size:48px;opacity:.06;animation:floatUp 16s ease-in-out infinite}
+.hero-float:nth-child(1){left:8%;top:35%;animation-delay:0s;font-size:38px}
+.hero-float:nth-child(2){left:82%;top:25%;animation-delay:-4s;font-size:28px}
+.hero-float:nth-child(3){left:55%;top:55%;animation-delay:-8s;font-size:42px}
+.hero-float:nth-child(4){left:22%;top:18%;animation-delay:-11s;font-size:24px}
+@keyframes floatUp{0%,100%{transform:translateY(0) rotate(0deg);opacity:.04}50%{transform:translateY(-40px) rotate(12deg);opacity:.1}}
+
+.hero-meta{position:absolute;top:calc(var(--nav-h) + 32px);left:48px;right:48px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
+.hero-badge{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-bright);border:1px solid rgba(0,102,255,0.35);padding:7px 16px 7px 24px;border-radius:2px;animation:fadeUp 1s ease .3s both;position:relative;background:rgba(0,102,255,0.05)}
+.hero-badge::before{content:'';position:absolute;left:10px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(0,102,255,0.5);animation:livePulse 2.5s ease-in-out infinite}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,102,255,0.5)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(0,102,255,0)}}
+.hero-location{text-align:right;font-size:11px;letter-spacing:.1em;color:var(--off);line-height:2.1;animation:fadeUp 1s ease .4s both}
+.hero-content{position:relative;z-index:2}
+.hero-eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--off);margin-bottom:20px;animation:fadeUp 1s ease .5s both}
+.hero-title{font-family:'Anton',sans-serif;font-size:clamp(60px,9.5vw,140px);line-height:.86;letter-spacing:-0.01em;margin-bottom:0;overflow:hidden}
+.hero-title .word{display:block;animation:titleReveal 1.1s cubic-bezier(.16,1,.3,1) both}
+.hero-title .word:nth-child(1){animation-delay:.6s}
+.hero-title .word:nth-child(2){animation-delay:.72s;color:var(--blue);text-shadow:0 0 60px rgba(0,102,255,0.25)}
+.hero-title .word:nth-child(3){animation-delay:.84s}
+.hero-title .word:nth-child(4){animation-delay:.96s;color:transparent;-webkit-text-stroke:1.5px rgba(242,240,235,0.25)}
+@keyframes titleReveal{from{transform:translateY(105%);opacity:0}to{transform:translateY(0);opacity:1}}
+.hero-sub{margin-top:40px;display:flex;align-items:flex-start;gap:40px;animation:fadeUp 1s ease 1.2s both}
+.hero-sub-line{width:2px;height:48px;flex-shrink:0;margin-top:4px;background:linear-gradient(to bottom,var(--blue),var(--orange));box-shadow:0 0 10px rgba(0,102,255,0.25);border-radius:1px}
+.hero-sub p{font-size:17px;font-weight:300;color:var(--off);max-width:500px;line-height:1.7}
+.hero-sub p em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--white);font-size:1.04em}
+.hero-countdown{position:absolute;bottom:80px;right:48px;z-index:2;text-align:right;animation:fadeUp 1s ease 1.4s both}
+.countdown-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.countdown-nums{display:flex;gap:20px;justify-content:flex-end}
+.cd-unit{text-align:center}
+.cd-num{font-family:'Anton',sans-serif;font-size:36px;color:var(--white);line-height:1;display:block;transition:transform .3s cubic-bezier(.16,1,.3,1),color .2s,text-shadow .2s;min-width:42px}
+.cd-num.tick{transform:scale(1.12);color:var(--blue);text-shadow:0 0 18px rgba(0,102,255,0.45)}
+.cd-sep{font-family:'Anton',sans-serif;font-size:36px;color:var(--dim);line-height:1;opacity:.3}
+.cd-unit-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+
+.scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;animation:fadeUp 1s ease 1.6s both}
+.scroll-cue span{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.scroll-arrow{width:1px;height:36px;background:linear-gradient(to bottom,var(--off) 0%,transparent 100%);animation:scrollPulse 2.4s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{transform:scaleY(.5);opacity:.3;transform-origin:top}50%{transform:scaleY(1);opacity:.8;transform-origin:top}}
+
+/* ── TICKER ── */
+.ticker{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);background:var(--surface);overflow:hidden;white-space:nowrap;padding:18px 0;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2}
+.ticker::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
+.ticker::after{right:0;background:linear-gradient(to left,var(--surface),transparent)}
+.ticker-inner{display:inline-flex;gap:0;animation:tickerMove 30s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{display:inline-flex;align-items:center;gap:28px;padding:0 44px;border-right:1px solid var(--line)}
+.ticker-num{font-family:'Anton',sans-serif;font-size:24px;color:var(--white);letter-spacing:.04em}
+.ticker-num.blue{color:var(--blue-bright);text-shadow:0 0 16px rgba(0,102,255,0.25)}
+.ticker-num.orange{color:var(--orange-bright);text-shadow:0 0 16px rgba(255,85,0,0.25)}
+.ticker-sep{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--off)}
+
+/* ── SECTION ── */
+.section{padding:140px 48px;border-top:1px solid var(--line);position:relative}
+.tag{display:inline-block;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:28px;padding:6px 0;border-bottom:1px solid var(--line2)}
+.section-head{font-family:'Anton',sans-serif;font-size:clamp(48px,6.5vw,96px);line-height:.92;letter-spacing:.01em;color:var(--white);margin-bottom:40px}
+.section-head .ital{font-family:'Instrument Serif',serif;font-style:italic;font-size:.92em;color:var(--blue-bright);text-shadow:0 0 36px rgba(0,102,255,0.18)}
+
+/* ── CONCEPT ── */
+.concept-wrap{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
+.concept-body p{font-size:16px;font-weight:300;color:var(--off);line-height:1.85}
+.concept-body p+p{margin-top:18px}
+.concept-body em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--white);font-size:1.04em}
+.why-list{margin-top:0}
+.why-item{padding:24px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:24px 1fr;gap:18px;align-items:start;transition:transform .3s,border-color .3s}
+.why-item:hover{transform:translateX(6px);border-color:var(--line2)}
+.why-item:last-child{border-bottom:1px solid var(--line)}
+.why-icon{font-size:16px;margin-top:1px}
+.why-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:5px;letter-spacing:.02em}
+.why-desc{font-size:13px;color:var(--off);line-height:1.65}
+
+/* ── ACTIVATIONS ── */
+.activations-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+.activations-count{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.act-stack{display:flex;flex-direction:column}
+.act-row{display:grid;grid-template-columns:56px 1fr 140px;gap:0;border-top:1px solid var(--line);align-items:stretch;transition:background .25s;cursor:default;position:relative}
+.act-row:last-child{border-bottom:1px solid var(--line)}
+.act-row:hover{background:var(--surface2)}
+.act-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--blue);transition:width .3s ease;box-shadow:0 0 12px rgba(0,102,255,0.35)}
+.act-row:hover::before{width:3px}
+.act-num-cell{padding:28px 16px 28px 0;font-family:'Anton',sans-serif;font-size:12px;letter-spacing:.1em;color:var(--dim);display:flex;align-items:flex-start;border-right:1px solid var(--line)}
+.act-main{padding:28px 36px;border-right:1px solid var(--line)}
+.act-label{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.act-icon{font-size:15px}
+.act-name{font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.04em;color:var(--white)}
+.act-zone{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.act-desc{font-size:13px;color:var(--off);line-height:1.75;max-width:540px;font-weight:300}
+.act-zone-cell{padding:28px 20px;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:8px}
+.zone-pip{width:6px;height:6px;border-radius:50%;background:var(--dim);flex-shrink:0;margin-top:5px}
+.zone-pip.blue{background:var(--blue);box-shadow:0 0 6px rgba(0,102,255,0.35)}
+.zone-name{font-size:11px;color:var(--off);line-height:1.5}
+
+/* ── VENUE MAP ── */
+.venue-map{margin-top:80px;position:relative}
+.venue-map-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:20px;display:block}
+.venue-grid{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:1px;background:var(--line);min-height:300px}
+.venue-zone{background:var(--bg);padding:36px 28px;transition:background .3s;position:relative;overflow:hidden}
+.venue-zone:hover{background:var(--surface2)}
+.venue-zone::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.venue-zone:hover::after{opacity:1}
+.venue-zone:nth-child(1)::after{background:radial-gradient(circle at 50% 50%,rgba(0,102,255,0.08),transparent 70%)}
+.venue-zone:nth-child(2)::after{background:radial-gradient(circle at 50% 50%,rgba(255,85,0,0.06),transparent 70%)}
+.venue-zone:nth-child(3)::after{background:radial-gradient(circle at 50% 50%,rgba(0,102,255,0.05),transparent 70%)}
+.venue-zone:nth-child(4)::after{background:radial-gradient(circle at 50% 50%,rgba(255,85,0,0.05),transparent 70%)}
+.venue-zone:nth-child(1){grid-row:1/3}
+.vz-name{font-family:'Anton',sans-serif;font-size:16px;letter-spacing:.06em;color:var(--white);margin-bottom:8px;position:relative;z-index:1}
+.vz-acts{font-size:12px;color:var(--off);line-height:1.9;position:relative;z-index:1}
+.vz-acts span{display:block}
+.vz-icon{font-size:24px;position:absolute;bottom:16px;right:20px;opacity:.1;z-index:0}
+
+/* ── RUN OF SHOW ── */
+.ros-single{background:var(--surface);padding:52px;margin-top:52px;border-radius:2px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.ros-single::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--orange));box-shadow:0 0 16px rgba(0,102,255,0.25)}
+.ros-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--line2)}
+.ros-date{font-family:'Anton',sans-serif;font-size:26px;letter-spacing:.06em;color:var(--white)}
+.ros-date span{color:var(--orange-bright);text-shadow:0 0 16px rgba(255,85,0,0.25)}
+.ros-status{display:flex;gap:12px;align-items:center}
+.ros-tbd{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-bright);background:rgba(255,85,0,0.08);border:1px solid rgba(255,85,0,0.25);padding:5px 12px;border-radius:2px}
+.ros-confirmed{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-bright);background:rgba(0,102,255,0.08);border:1px solid rgba(0,102,255,0.25);padding:5px 12px;border-radius:2px}
+.ros-timeline{display:flex;flex-direction:column;gap:0}
+.ros-row{display:grid;grid-template-columns:100px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--line);transition:background .2s}
+.ros-row:last-child{border-bottom:none}
+.ros-t{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;padding-top:2px;line-height:1.5}
+.ros-w{font-size:14px;font-weight:500;color:var(--white);margin-bottom:2px;line-height:1.4}
+.ros-n{font-size:12px;color:var(--off);line-height:1.6;font-weight:300}
+.ros-row.key{margin:3px -52px;padding:16px 52px;background:rgba(0,102,255,0.06);border-left:3px solid var(--blue);border-bottom:1px solid rgba(0,102,255,0.1)}
+.ros-row.key .ros-w{color:var(--blue-bright)}
+.ros-row.fire{margin:3px -52px;padding:16px 52px;background:rgba(255,85,0,0.05);border-left:3px solid var(--orange);border-bottom:1px solid rgba(255,85,0,0.08)}
+.ros-row.fire .ros-w{color:var(--orange-bright)}
+.ros-row.tbd .ros-t{color:var(--orange-bright);font-style:italic}
+
+/* ── CLIPS ── */
+.clips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.clip-card{background:var(--bg);padding:36px 28px;transition:background .2s,transform .3s;position:relative;overflow:hidden}
+.clip-card:hover{background:var(--surface2);transform:translateY(-2px)}
+.clip-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--blue-bright));transform:scaleX(0);transform-origin:left;transition:transform .4s ease;box-shadow:0 0 10px rgba(0,102,255,0.3)}
+.clip-card:hover::after{transform:scaleX(1)}
+.clip-dur{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-bright);margin-bottom:12px;font-weight:500}
+.clip-name{font-size:14px;font-weight:500;color:var(--white);margin-bottom:8px;line-height:1.5}
+.clip-plat{font-size:11px;color:var(--dim)}
+.clip-card:nth-child(1) .clip-dur{color:var(--orange-bright)}
+.clip-card:nth-child(4) .clip-dur{color:var(--orange-bright)}
+
+/* ── STATUS ── */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:56px}
+.status-col{background:var(--bg);padding:40px 36px}
+.status-col-head{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.08em;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.status-col-head .dot{width:6px;height:6px;border-radius:50%}
+.status-col-head .dot.blue{background:var(--blue);box-shadow:0 0 6px rgba(0,102,255,0.4)}
+.status-col-head .dot.orange{background:var(--orange);box-shadow:0 0 6px rgba(255,85,0,0.4)}
+.status-item{padding:10px 0;font-size:13px;color:var(--off);line-height:1.6;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}
+.status-item:last-child{border-bottom:none}
+.status-check{color:var(--blue-bright);font-size:12px;margin-top:2px;flex-shrink:0}
+.status-open{color:var(--orange-bright);font-size:12px;margin-top:2px;flex-shrink:0}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--line2);padding:44px 48px;display:flex;justify-content:space-between;align-items:center}
+.footer-left{font-size:12px;color:var(--off)}
+.footer-left span{color:var(--blue-bright)}
+.footer-right{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.4s}.reveal-d5{transition-delay:.5s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2) 20%,var(--line2) 80%,transparent);position:relative}
+.section-divider::after{content:'';position:absolute;left:50%;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--blue);transform:translateX(-50%);box-shadow:0 0 12px rgba(0,102,255,0.4)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .clips-grid{grid-template-columns:repeat(2,1fr)}
+  .venue-grid{grid-template-columns:1fr}
+  .venue-zone:nth-child(1){grid-row:auto}
+  .status-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  :root{--nav-h:56px}
+  nav,.hero,.section,.footer{padding-left:24px;padding-right:24px}
+  .hero-meta{left:24px;right:24px}
+  .hero-countdown{right:24px}
+  .hero-title{font-size:clamp(44px,13vw,100px)}
+  .concept-wrap{grid-template-columns:1fr;gap:48px}
+  .act-row{grid-template-columns:1fr}
+  .act-num-cell,.act-zone-cell{border-right:none;border-top:1px solid var(--line)}
+  .act-num-cell{display:none}
+  .clips-grid{grid-template-columns:1fr}
+  .ros-single{padding:28px;margin-top:36px}
+  .ros-row.key,.ros-row.fire{margin-left:-28px;margin-right:-28px;padding-left:28px;padding-right:28px}
+  .nav-links{display:none}
+  #cursor,#cursor-ring{display:none}
+  body{cursor:auto}
+  a,button{cursor:pointer}
+  .hero-float{display:none}
+  .venue-grid{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo"><span>Gemini</span> Series</div>
+  <div class="nav-center">March Madness · PubKey DC · March 27</div>
+  <div class="nav-links">
+    <a href="#concept" class="nav-link">Concept</a>
+    <a href="#activations" class="nav-link">Activations</a>
+    <a href="#schedule" class="nav-link">Schedule</a>
+    <a href="#content" class="nav-link">Content</a>
+    <a href="#schedule" class="nav-cta">Mar 27 — DC</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lines"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-float">&#127936;</div>
+  <div class="hero-float">&#127942;</div>
+  <div class="hero-float">&#127936;</div>
+  <div class="hero-float">&#9889;</div>
+
+  <div class="hero-meta">
+    <div class="hero-badge">Gemini Series Live @ PubKey DC</div>
+    <div class="hero-location">Penn Quarter · Washington D.C.<br>12,000 sq ft</div>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Elite Eight Watch Party · Five Activations · Prediction Market Overlay</p>
+    <h1 class="hero-title">
+      <span class="word">MARCH</span>
+      <span class="word">MAD</span>
+      <span class="word">NESS</span>
+      <span class="word">DC</span>
+    </h1>
+    <div class="hero-sub">
+      <div class="hero-sub-line"></div>
+      <p>Five activations across 12,000 square feet. <em>Every zone feeds Gemini's prediction market overlay</em> — the stream, the floor, the back room, the bar.</p>
+    </div>
+  </div>
+
+  <div class="hero-countdown">
+    <div class="countdown-label">Countdown to March 27</div>
+    <div class="countdown-nums">
+      <div class="cd-unit"><span class="cd-num" id="cd-d">10</span><div class="cd-unit-label">Days</div></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-h">00</span><div class="cd-unit-label">Hrs</div></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-m">00</span><div class="cd-unit-label">Min</div></div>
+      <div class="cd-unit"><span class="cd-num" id="cd-s">00</span><div class="cd-unit-label">Sec</div></div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <div class="ticker-item"><span class="ticker-num blue">5</span><span class="ticker-sep">Activations</span></div>
+    <div class="ticker-item"><span class="ticker-num">12,000</span><span class="ticker-sep">Square Feet</span></div>
+    <div class="ticker-item"><span class="ticker-num orange">200+</span><span class="ticker-sep">Expected Capacity</span></div>
+    <div class="ticker-item"><span class="ticker-num">1</span><span class="ticker-sep">Elite Eight Game</span></div>
+    <div class="ticker-item"><span class="ticker-num blue">Live</span><span class="ticker-sep">Prediction Market</span></div>
+    <div class="ticker-item"><span class="ticker-num orange">Mar 27</span><span class="ticker-sep">Game Day</span></div>
+    <div class="ticker-item"><span class="ticker-num blue">5</span><span class="ticker-sep">Activations</span></div>
+    <div class="ticker-item"><span class="ticker-num">12,000</span><span class="ticker-sep">Square Feet</span></div>
+    <div class="ticker-item"><span class="ticker-num orange">200+</span><span class="ticker-sep">Expected Capacity</span></div>
+    <div class="ticker-item"><span class="ticker-num">1</span><span class="ticker-sep">Elite Eight Game</span></div>
+    <div class="ticker-item"><span class="ticker-num blue">Live</span><span class="ticker-sep">Prediction Market</span></div>
+    <div class="ticker-item"><span class="ticker-num orange">Mar 27</span><span class="ticker-sep">Game Day</span></div>
+  </div>
+</div>
+
+<!-- CONCEPT -->
+<section class="section" id="concept">
+  <div class="reveal"><span class="tag">01 — The Concept</span></div>
+  <div class="concept-wrap">
+    <div>
+      <h2 class="section-head reveal reveal-d1">The Whole<br>Venue Is <span class="ital">the Event</span></h2>
+      <div class="concept-body reveal reveal-d2">
+        <p>PubKey DC runs 12,000 square feet across Penn Quarter. <em>Every room operates simultaneously.</em> Games on every screen. Gemini's prediction market in the stream overlay. A branded hot dog cart on the main floor. Basketball machines in the back. A beer pong bracket on the venue screen.</p>
+        <p>One Elite Eight game, five activations, one stream. The prediction market overlay ties every zone together — whether someone's at the bar, in the back room, or watching on stream, they're inside the same market.</p>
+      </div>
+    </div>
+    <div class="why-list reveal reveal-d3">
+      <div class="why-item">
+        <span class="why-icon">&#128202;</span>
+        <div>
+          <div class="why-title">Prediction market as live product activation</div>
+          <div class="why-desc">Coaster QR codes and stream overlay funnel every guest directly into Gemini's prediction market. Product adoption happens inside the event, not after.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">&#127936;</span>
+        <div>
+          <div class="why-title">March Madness is a universal entry point</div>
+          <div class="why-desc">The Elite Eight draws a crowd that isn't already crypto-native. Sports creates the context, prediction markets create the hook.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">&#127909;</span>
+        <div>
+          <div class="why-title">Every activation is a clip</div>
+          <div class="why-desc">Market flips, buzzer beaters, pong finals called on stream. The content schedule below maps each moment to platform and format.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">&#127789;</span>
+        <div>
+          <div class="why-title">Gemini branding in every frame</div>
+          <div class="why-desc">Stream overlay, hot dog cart, coasters, pong table felt, venue screens. The brand is the environment — visible in every wide shot and social post.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENUE MAP -->
+  <div class="venue-map reveal reveal-d4">
+    <span class="venue-map-label">Venue Zone Layout</span>
+    <div class="venue-grid">
+      <div class="venue-zone">
+        <div class="vz-name">Main Bar / Stage</div>
+        <div class="vz-acts">
+          <span>&#128202; Stream + prediction market overlay</span>
+          <span>&#127789; Hot dog cart (floor level)</span>
+          <span>&#127903;&#65039; Coaster QR codes on every surface</span>
+          <span>&#128250; Primary camera positions</span>
+        </div>
+        <div class="vz-icon">&#127866;</div>
+      </div>
+      <div class="venue-zone">
+        <div class="vz-name">Back Room</div>
+        <div class="vz-acts">
+          <span>&#127936; Arcade basketball machines</span>
+          <span>&#127903;&#65039; Leaderboard screen</span>
+        </div>
+        <div class="vz-icon">&#127936;</div>
+      </div>
+      <div class="venue-zone">
+        <div class="vz-name">Side / Open Area</div>
+        <div class="vz-acts">
+          <span>&#127866; Beer pong bracket</span>
+          <span>&#127903;&#65039; Mammoth branded setup</span>
+        </div>
+        <div class="vz-icon">&#127942;</div>
+      </div>
+      <div class="venue-zone">
+        <div class="vz-name">All Zones</div>
+        <div class="vz-acts">
+          <span>&#128250; Game on every screen</span>
+          <span>&#127903;&#65039; Gemini coasters everywhere</span>
+        </div>
+        <div class="vz-icon">&#128250;</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ACTIVATIONS -->
+<section class="section" id="activations">
+  <div class="reveal">
+    <span class="tag">02 — Activations</span>
+    <div class="activations-header">
+      <h2 class="section-head" style="margin-bottom:0">What's Running<br>in the <span class="ital">Room</span></h2>
+      <div class="activations-count">Five zones · All simultaneous</div>
+    </div>
+  </div>
+
+  <div class="act-stack">
+    <div class="act-row reveal">
+      <div class="act-num-cell">01</div>
+      <div class="act-main">
+        <div class="act-label"><span class="act-icon">&#128202;</span><span class="act-name">Live Stream + Prediction Market Overlay</span></div>
+        <div class="act-zone">Production Spine · Main Bar / Stage</div>
+        <p class="act-desc">Multi-camera stream with a Gemini-branded PiP frame showing live market odds on every venue screen. Host calls game action and market movement simultaneously. This is the connective layer — everything else feeds into it.</p>
+      </div>
+      <div class="act-zone-cell"><div style="display:flex;align-items:center;gap:10px;"><div class="zone-pip blue"></div><div class="zone-name">Main Bar<br>/ Stage</div></div></div>
+    </div>
+    <div class="act-row reveal reveal-d1">
+      <div class="act-num-cell">02</div>
+      <div class="act-main">
+        <div class="act-label"><span class="act-icon">&#127789;</span><span class="act-name">Gemini Hot Dog Cart</span></div>
+        <div class="act-zone">Brand Presence · Main Floor</div>
+        <p class="act-desc">Gemini-branded cart on the main floor. Free for the room. Visible from the bar and in every wide camera shot — passive brand placement that works in photos, stream, and social.</p>
+      </div>
+      <div class="act-zone-cell"><div style="display:flex;align-items:center;gap:10px;"><div class="zone-pip blue"></div><div class="zone-name">Main<br>Floor</div></div></div>
+    </div>
+    <div class="act-row reveal reveal-d2">
+      <div class="act-num-cell">03</div>
+      <div class="act-main">
+        <div class="act-label"><span class="act-icon">&#127936;</span><span class="act-name">Arcade Basketball Shootout</span></div>
+        <div class="act-zone">Engagement · Back Room</div>
+        <p class="act-desc">Two arcade machines. Sink 3 in a row to earn a prediction market credit. Leaderboard on a venue screen tracks top shooters and top predictors side by side.</p>
+      </div>
+      <div class="act-zone-cell"><div style="display:flex;align-items:center;gap:10px;"><div class="zone-pip"></div><div class="zone-name">Back<br>Room</div></div></div>
+    </div>
+    <div class="act-row reveal reveal-d3">
+      <div class="act-num-cell">04</div>
+      <div class="act-main">
+        <div class="act-label"><span class="act-icon">&#127866;</span><span class="act-name">Mammoth Beer Pong Tournament</span></div>
+        <div class="act-zone">Mammoth Branded Moment · Side Area</div>
+        <p class="act-desc">Single-elimination bracket. Mammoth-branded cups, Gemini Series table felt. Final round called live on stream during halftime.</p>
+      </div>
+      <div class="act-zone-cell"><div style="display:flex;align-items:center;gap:10px;"><div class="zone-pip"></div><div class="zone-name">Side /<br>Open Area</div></div></div>
+    </div>
+    <div class="act-row reveal reveal-d4">
+      <div class="act-num-cell">05</div>
+      <div class="act-main">
+        <div class="act-label"><span class="act-icon">&#127903;&#65039;</span><span class="act-name">Coaster QR Credits</span></div>
+        <div class="act-zone">Connective Tissue · All Zones</div>
+        <p class="act-desc">Gemini-branded coasters at every table and bar top. QR links directly to the prediction market with a credit pre-loaded. Scan and play — no signup friction.</p>
+      </div>
+      <div class="act-zone-cell"><div style="display:flex;align-items:center;gap:10px;"><div class="zone-pip blue"></div><div class="zone-name">All<br>Zones</div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SCHEDULE -->
+<section class="section" id="schedule">
+  <div class="reveal">
+    <span class="tag">03 — Schedule</span>
+    <h2 class="section-head">Run of <span class="ital">Show</span></h2>
+    <p style="font-size:14px;color:var(--off);max-width:520px;font-weight:300;line-height:1.8;">Game time locks once the bracket is set. Structure below holds regardless of tip-off — everything flexes around the game.</p>
+  </div>
+
+  <div class="ros-single reveal reveal-d1">
+    <div class="ros-head">
+      <div class="ros-date"><span>FRI</span> March 27</div>
+      <div class="ros-status">
+        <div class="ros-confirmed">Structure locked</div>
+        <div class="ros-tbd">Tip-off TBD</div>
+      </div>
+    </div>
+    <div class="ros-timeline">
+      <div class="ros-row">
+        <div class="ros-t">Early PM</div>
+        <div><div class="ros-w">Full venue setup</div><div class="ros-n">Machines in, pong table set, coasters deployed, cart staged, screens tested</div></div>
+      </div>
+      <div class="ros-row">
+        <div class="ros-t">Doors</div>
+        <div><div class="ros-w">All activations go live</div><div class="ros-n">Hot dog cart on, pong sign-ups open, coasters on every surface, stream overlay warming up</div></div>
+      </div>
+      <div class="ros-row">
+        <div class="ros-t">Pre-game</div>
+        <div><div class="ros-w">Stream goes live</div><div class="ros-n">Host on camera, Gemini overlay active, prediction market opens</div></div>
+      </div>
+      <div class="ros-row key tbd">
+        <div class="ros-t">Tip-off</div>
+        <div><div class="ros-w">Tip-off — Elite Eight Game</div><div class="ros-n">Live market odds in PiP overlay. Host calls game action and market movement simultaneously.</div></div>
+      </div>
+      <div class="ros-row">
+        <div class="ros-t">Halftime</div>
+        <div><div class="ros-w">Market recap + leaderboard flash</div><div class="ros-n">Top predictions reviewed on stream, basketball shootout leaderboard update</div></div>
+      </div>
+      <div class="ros-row fire">
+        <div class="ros-t">Halftime</div>
+        <div><div class="ros-w">Mammoth Beer Pong Final — on stream</div><div class="ros-n">Called live between games. Mammoth branding front and center.</div></div>
+      </div>
+      <div class="ros-row fire">
+        <div class="ros-t">Final buzzer</div>
+        <div><div class="ros-w">Leaderboard Reveal — on stream</div><div class="ros-n">Top predictor crowned, crowd shot, Gemini + Mammoth moment</div></div>
+      </div>
+      <div class="ros-row">
+        <div class="ros-t">Post-game</div>
+        <div><div class="ros-w">Stream wraps</div><div class="ros-n">Gemini Series outro. VOD queued for distribution.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CLIPS -->
+<section class="section" id="content">
+  <div class="reveal">
+    <span class="tag">04 — Content Deliverables</span>
+    <h2 class="section-head">Built to<br><span class="ital">Clip</span></h2>
+    <p style="font-size:14px;color:var(--off);max-width:520px;font-weight:300;line-height:1.8;margin-bottom:40px;">Every activation is designed to produce at least one standalone clip. Formats and platforms mapped below.</p>
+  </div>
+  <div class="clips-grid reveal reveal-d1">
+    <div class="clip-card">
+      <div class="clip-dur">60–90 sec · Hero</div>
+      <div class="clip-name">Mammoth Final called live on stream</div>
+      <div class="clip-plat">X · YouTube · Instagram Reels</div>
+    </div>
+    <div class="clip-card">
+      <div class="clip-dur">30 sec + PiP</div>
+      <div class="clip-name">Gemini odds flipping during a live game run</div>
+      <div class="clip-plat">X · YouTube Shorts</div>
+    </div>
+    <div class="clip-card">
+      <div class="clip-dur">30–45 sec</div>
+      <div class="clip-name">Basketball hot streak earns a market credit</div>
+      <div class="clip-plat">Instagram Reels · TikTok</div>
+    </div>
+    <div class="clip-card">
+      <div class="clip-dur">60 sec · Hero</div>
+      <div class="clip-name">Buzzer beater + crowd eruption + market settling</div>
+      <div class="clip-plat">X · YouTube</div>
+    </div>
+    <div class="clip-card">
+      <div class="clip-dur">15–20 sec</div>
+      <div class="clip-name">Hot dog cart moment, Gemini branding in frame</div>
+      <div class="clip-plat">X · Instagram Stories</div>
+    </div>
+    <div class="clip-card">
+      <div class="clip-dur">45 sec</div>
+      <div class="clip-name">Leaderboard reveal, top predictor crowned</div>
+      <div class="clip-plat">All platforms</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- STATUS -->
+<section class="section" id="status">
+  <div class="reveal">
+    <span class="tag">05 — Status</span>
+    <h2 class="section-head">Where <span class="ital">We're At</span></h2>
+  </div>
+
+  <div class="status-grid reveal reveal-d1">
+    <div class="status-col">
+      <div class="status-col-head"><div class="dot blue"></div>PubKey Handling</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Venue locked — PubKey DC, Penn Quarter</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Production crew and multi-camera stream</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Hot dog cart sourcing and branding</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Arcade basketball machines</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Beer pong setup + Mammoth coordination</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Coaster design + QR routing</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Stream overlay design and integration</div>
+      <div class="status-item"><span class="status-check">&#10003;</span> Run of show + on-site staffing</div>
+    </div>
+    <div class="status-col">
+      <div class="status-col-head"><div class="dot orange"></div>Needs from Gemini</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> Prediction market platform confirmation + QR endpoint</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> Approval on stream overlay layout and brand placement</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> Logo files / media kit for coasters, cart wrap, table felt</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> Content distribution plan — who receives VOD and clips</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> Social promo guidance — day-of posting approval</div>
+      <div class="status-item"><span class="status-open">&#9675;</span> On-site Gemini team attendance (if any)</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left"><span>Gemini Series</span> Live @ PubKey DC · March 27, 2026</div>
+  <div class="footer-right">Internal Reference · pubkeybar.com</div>
+</footer>
+
+<script>
+/* PARTICLES */
+const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');let particles=[];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+class Particle{constructor(){this.reset()}
+reset(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25;this.size=Math.random()*1.8+.4;this.opacity=Math.random()*.15+.03;this.color=Math.random()>.75?'0,102,255':'242,240,235'}
+update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>canvas.width)this.vx*=-1;if(this.y<0||this.y>canvas.height)this.vy*=-1}
+draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(${this.color},${this.opacity})`;ctx.fill()}}
+for(let i=0;i<50;i++)particles.push(new Particle());
+function animP(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.update();p.draw()});
+for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<140){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(0,102,255,${.03*(1-d/140)})`;ctx.lineWidth=.5;ctx.stroke()}}
+requestAnimationFrame(animP)}animP();
+
+/* CURSOR */
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function cLoop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cursor.style.left=mx+'px';cursor.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(cLoop)})();
+
+/* NAV */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>60)},{passive:true});
+
+/* SCROLL PROGRESS */
+const pb=document.getElementById('scroll-progress');
+window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;pb.style.width=(window.scrollY/h)*100+'%'},{passive:true});
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.06});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* COUNTDOWN */
+let lastSec=-1;
+function updateCD(){const t=new Date('2026-03-27T18:00:00-04:00'),n=new Date(),d=t-n;
+if(d<=0){document.querySelector('.hero-countdown').innerHTML='<div class="countdown-label" style="color:var(--blue-bright);font-size:12px;letter-spacing:.2em">Game Day</div>';return}
+const dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4),ss=Math.floor(d%6e4/1e3);
+const se=document.getElementById('cd-s');if(se&&ss!==lastSec){se.classList.add('tick');setTimeout(()=>se.classList.remove('tick'),180);lastSec=ss}
+document.getElementById('cd-d').textContent=String(dd).padStart(2,'0');document.getElementById('cd-h').textContent=String(hh).padStart(2,'0');document.getElementById('cd-m').textContent=String(mm).padStart(2,'0');if(se)se.textContent=String(ss).padStart(2,'0')}
+updateCD();setInterval(updateCD,1000);
+
+/* TITLE REVEAL */
+document.querySelectorAll('.hero-title .word').forEach(w=>{const d=document.createElement('div');d.style.cssText='overflow:hidden;display:block;';w.parentNode.insertBefore(d,w);d.appendChild(w)});
+
+/* NAV SMOOTH SCROLL */
+document.querySelectorAll('.nav-link,.nav-cta').forEach(l=>{l.addEventListener('click',e=>{const h=l.getAttribute('href');if(h&&h.startsWith('#')){e.preventDefault();const t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}})});
+</script>
+</body>
+</html>
